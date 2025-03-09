@@ -16,7 +16,7 @@ namespace Saper
 
         private void btnResume_Click(object sender, EventArgs e)
         {
-            this.Close(); // Закрываем форму паузы, чтобы вернуться к игре
+            this.Close(); // Закрываем форму паузы
             gameForm.Show(); // Показываем игровую форму
         }
 

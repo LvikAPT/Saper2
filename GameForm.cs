@@ -13,8 +13,7 @@ namespace Saper
         private Button[,] buttons;
         private bool[,] mineField;
         private bool gameOver = false;
-        private System.Windows.Forms.Timer timer; // Explicitly use System.Windows.Forms.Timer
-
+        private System.Windows.Forms.Timer timer; // Таймер
         private int elapsedTime; // Время в секундах
         private int flagsPlaced; // Количество установленных флажков
 
@@ -44,11 +43,6 @@ namespace Saper
                     rows = 12;
                     columns = 12;
                     mines = 30;
-                    break;
-                case "Тестовый": // New case for test level
-                    rows = 4;
-                    columns = 4;
-                    mines = 1;
                     break;
             }
             buttons = new Button[rows, columns];
@@ -97,7 +91,7 @@ namespace Saper
         {
             elapsedTime = 0; // Сброс времени
             flagsPlaced = 0; // Сброс флажков
-            timer = new System.Windows.Forms.Timer(); // Explicitly use System.Windows.Forms.Timer
+            timer = new System.Windows.Forms.Timer();
             timer.Interval = 1000; // 1 секунда
             timer.Tick += Timer_Tick;
             timer.Start(); // Запуск таймера
@@ -133,7 +127,8 @@ namespace Saper
             else
             {
                 button.BackColor = Color.LightGray; // Открываем клетку
-                // Здесь можно добавить логику для подсчета соседних мин
+                button.Enabled = false; // Делаем кнопку неактивной
+                CheckWinCondition(); // Проверяем условия победы
             }
         }
 
@@ -151,48 +146,54 @@ namespace Saper
             if (gameOver) return;
 
             ToolStripMenuItem item = sender as ToolStripMenuItem;
-            Button button = (Button)item.GetCurrentParent().Controls[0]; // Correctly access the button
+            ContextMenuStrip contextMenu = item.GetCurrentParent() as ContextMenuStrip;
+            Button button = contextMenu.SourceControl as Button; // Correctly cast to Button
 
-            int row = button.Location.Y / 30;
-            int col = button.Location.X / 30;
-
-            if (button.Text == "★") // Если флажок уже установлен
+            if (button != null) // Ensure button is not null
             {
-                button.Text = ""; // Убираем флажок
-                flagsPlaced--; // Уменьшаем счетчик флажков
-            }
-            else
-            {
-                button.Text = "★"; // Устанавливаем флажок
-                flagsPlaced++; // Увеличиваем счетчик флажков
+                if (button.Text == "★") // If the flag is already set
+                {
+                    button.Text = ""; // Remove the flag
+                    flagsPlaced--; // Decrease the flag count
+                }
+                else
+                {
+                    button.Text = "★"; // Set the flag
+                    flagsPlaced++; // Increase the flag count
+                }
             }
         }
 
         private void ShowResult()
         {
-            if (gameOver) return; // Prevent recording if the game is over due to hitting a mine
-
             int finalTime = elapsedTime - flagsPlaced; // Вычитаем секунды за установленные флажки
-            string resultMessage;
-            if (flagsPlaced == mines) 
-
-
-
-
-
-
-
-            {
-                resultMessage = "Поздравляем! Вы выиграли!";
-            } 
-            else 
-            {
-                resultMessage = "Игра окончена! Вы попали на мину.";
-            }
-            ResultForm resultForm = new ResultForm(resultMessage, "Сложность", finalTime); // Ensure correct constructor
-
+            ResultForm resultForm = new ResultForm("Игра окончена!", "Сложность", finalTime);
             resultForm.ShowDialog();
             this.Close();
+        }
+
+        private void CheckWinCondition()
+        {
+            // Проверяем, открыты ли все клетки, кроме мин
+            int openedCells = 0;
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    if (buttons[i, j].BackColor == Color.LightGray) // Если клетка открыта
+                    {
+                        openedCells++;
+                    }
+                }
+            }
+
+            // Если все клетки, кроме мин, открыты, игрок выигрывает
+            if (openedCells == (rows * columns - mines))
+            {
+                gameOver = true;
+                timer.Stop(); // Останавливаем таймер
+                ShowResult(); // Показываем результат
+            }
         }
     }
 }
