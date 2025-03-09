@@ -1,6 +1,7 @@
 // GameForm.cs
 using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Saper
@@ -13,7 +14,7 @@ namespace Saper
         private Button[,] buttons;
         private bool[,] mineField;
         private bool gameOver = false;
-        private System.Windows.Forms.Timer timer; // Таймер
+        private System.Windows.Forms.Timer timer; // Таймер // Таймер
         private int elapsedTime; // Время в секундах
         private int flagsPlaced; // Количество установленных флажков
 
@@ -30,9 +31,9 @@ namespace Saper
             switch (difficulty)
             {
                 case "Легкий":
-                    rows = 8;
-                    columns = 8;
-                    mines = 10;
+                    rows = 1;
+                    columns = 1;
+                    mines = 0;
                     break;
                 case "Средний":
                     rows = 10;
@@ -122,7 +123,7 @@ namespace Saper
                 button.BackColor = Color.Red; // Показываем, что это мина
                 gameOver = true;
                 timer.Stop(); // Останавливаем таймер
-                ShowResult();
+                ShowResult(false); // Передаем false, чтобы не записывать результат
             }
             else
             {
@@ -151,7 +152,7 @@ namespace Saper
             }
         }
 
-        private void ShowResult()
+        private void ShowResult(bool won)
         {
             // Показываем все мины
             for (int i = 0; i < rows; i++)
@@ -165,10 +166,66 @@ namespace Saper
                 }
             }
 
-            int finalTime = elapsedTime - flagsPlaced; // Вычитаем секунды за установленные флажки
-            ResultForm resultForm = new ResultForm("Игра окончена!", "Сложность", finalTime);
-            resultForm.ShowDialog();
+            if (won)
+            {
+                int finalTime = elapsedTime - flagsPlaced; // Вычитаем секунды за установленные флажки
+                string playerName = PromptForPlayerName(); // Запрашиваем имя игрока
+                if (!string.IsNullOrEmpty(playerName))
+                {
+                    AddScoreToLeaderboard(playerName, finalTime); // Добавляем результат в лидерборд
+                }
+                ResultForm resultForm = new ResultForm("Поздравляем! Вы выиграли!", "Сложность", finalTime);
+                resultForm.ShowDialog();
+            }
+            else
+            {
+                ResultForm resultForm = new ResultForm("Игра окончена! Вы попали на мину.", "Сложность", elapsedTime);
+                resultForm.ShowDialog();
+            }
+
             this.Close();
+        }
+
+        private string PromptForPlayerName()
+        {
+            // Используем InputBox для запроса имени игрока
+            return Microsoft.VisualBasic.Interaction.InputBox("Введите ваше имя:", "Имя игрока", "Игрок", -1, -1);
+        }
+
+        private void AddScoreToLeaderboard(string playerName, int time)
+        {
+            // Добавляем результат в файл leaderboard.txt
+            const string leaderboardFilePath = "leaderboard.txt";
+
+            // Проверяем, есть ли в лидерборде хотя бы один игрок
+            if (File.Exists(leaderboardFilePath))
+            {
+                string[] lines = File.ReadAllLines(leaderboardFilePath);
+                if (lines.Length > 0)
+                {
+                    // Получаем время первого игрока
+                    string[] firstPlayerData = lines[0].Split(';');
+                    if (firstPlayerData.Length > 1 && int.TryParse(firstPlayerData[1], out int firstPlayerTime))
+                    {
+                        // Если время игрока лучше на 1 секунду, добавляем его в лидерборд
+                        if (time < firstPlayerTime - 1)
+                        {
+                            using (StreamWriter writer = new StreamWriter(leaderboardFilePath, true))
+                            {
+                                writer.WriteLine($"{playerName};{time}"); // Записываем имя игрока и время
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // Если файл не существует, создаем его и добавляем результат
+                using (StreamWriter writer = new StreamWriter(leaderboardFilePath, true))
+                {
+                    writer.WriteLine($"{playerName};{time}"); // Записываем имя игрока и время
+                }
+            }
         }
 
         private void CheckWinCondition()
@@ -191,7 +248,7 @@ namespace Saper
             {
                 gameOver = true;
                 timer.Stop(); // Останавливаем таймер
-                ShowResult(); // Показываем результат
+                ShowResult(true); // Передаем true, чтобы записать результат
             }
         }
     }

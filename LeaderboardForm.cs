@@ -23,8 +23,15 @@ namespace Saper
                 using (StreamReader reader = new StreamReader(leaderboardFilePath))
                 {
                     txtLeaderboard.Clear(); // Очищаем текстовое поле перед загрузкой
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
+                    string[] lines = reader.ReadToEnd().Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                    // Сортируем записи по времени (второй элемент после ";") и добавляем их в текстовое поле
+                    var sortedLines = lines
+                        .Select(line => line.Split(';'))
+                        .Where(parts => parts.Length == 2)
+                        .OrderBy(parts => int.Parse(parts[1])) // Сортируем по времени
+                        .Select(parts => $"{parts[0]}: {parts[1]} секунд");
+
+                    foreach (var line in sortedLines)
                     {
                         txtLeaderboard.AppendText(line + Environment.NewLine); // Добавляем каждую строку в текстовое поле
                     }
@@ -36,37 +43,13 @@ namespace Saper
             }
         }
 
-        // Метод для добавления нового результата в лидерборд
-        public void AddScore(string playerName, int time)
+        private void btnClearLeaderboard_Click(object sender, EventArgs e)
         {
-            // Проверяем, есть ли в лидерборде хотя бы один игрок
+            // Очищаем файл лидерборда
             if (File.Exists(leaderboardFilePath))
             {
-                string[] lines = File.ReadAllLines(leaderboardFilePath);
-                if (lines.Length > 0)
-                {
-                    // Получаем время первого игрока
-                    string[] firstPlayerData = lines[0].Split(';');
-                    if (firstPlayerData.Length > 1 && int.TryParse(firstPlayerData[1], out int firstPlayerTime))
-                    {
-                        // Если время игрока больше времени первого игрока, добавляем его в лидерборд
-                        if (time > firstPlayerTime)
-                        {
-                            using (StreamWriter writer = new StreamWriter(leaderboardFilePath, true))
-                            {
-                                writer.WriteLine($"{playerName};{time}"); // Записываем имя игрока и время
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                // Если файл не существует, создаем его и добавляем результат
-                using (StreamWriter writer = new StreamWriter(leaderboardFilePath, true))
-                {
-                    writer.WriteLine($"{playerName};{time}"); // Записываем имя игрока и время
-                }
+                File.WriteAllText(leaderboardFilePath, string.Empty); // Очищаем содержимое файла
+                LoadLeaderboard(); // Перезагружаем лидерборд
             }
         }
     }
