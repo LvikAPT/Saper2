@@ -59,8 +59,8 @@ namespace Saper
                     buttons[i, j] = new Button();
                     buttons[i, j].Size = new Size(30, 30);
                     buttons[i, j].Location = new Point(j * 30, i * 30);
-                    buttons[i, j].Click += Button_Click;
-                    buttons[i, j].ContextMenuStrip = CreateContextMenu(); // Добавляем контекстное меню для установки флажка
+                    buttons[i, j].Click += Button_Click; // Левый клик для открытия клетки
+                    buttons[i, j].MouseDown += Button_MouseDown; // Правый клик для установки флажка
                     this.Controls.Add(buttons[i, j]);
                 }
             }
@@ -132,40 +132,39 @@ namespace Saper
             }
         }
 
-        private ContextMenuStrip CreateContextMenu()
+        private void Button_MouseDown(object sender, MouseEventArgs e)
         {
-            ContextMenuStrip contextMenu = new ContextMenuStrip();
-            ToolStripMenuItem flagItem = new ToolStripMenuItem("Установить флажок");
-            flagItem.Click += FlagItem_Click;
-            contextMenu.Items.Add(flagItem);
-            return contextMenu;
-        }
-
-        private void FlagItem_Click(object sender, EventArgs e)
-        {
-            if (gameOver) return;
-
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
-            ContextMenuStrip contextMenu = item.GetCurrentParent() as ContextMenuStrip;
-            Button button = contextMenu.SourceControl as Button; // Correctly cast to Button
-
-            if (button != null) // Ensure button is not null
+            if (e.Button == MouseButtons.Right) // Проверяем, был ли нажат правый клик
             {
-                if (button.Text == "★") // If the flag is already set
+                Button button = sender as Button;
+
+                if (button.Text == "★") // Если флажок уже установлен
                 {
-                    button.Text = ""; // Remove the flag
-                    flagsPlaced--; // Decrease the flag count
+                    button.Text = ""; // Убираем флажок
+                    flagsPlaced--; // Уменьшаем счетчик флажков
                 }
                 else
                 {
-                    button.Text = "★"; // Set the flag
-                    flagsPlaced++; // Increase the flag count
+                    button.Text = "★"; // Устанавливаем флажок
+                    flagsPlaced++; // Увеличиваем счетчик флажков
                 }
             }
         }
 
         private void ShowResult()
         {
+            // Показываем все мины
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    if (mineField[i, j])
+                    {
+                        buttons[i, j].BackColor = Color.Red; // Показываем мины
+                    }
+                }
+            }
+
             int finalTime = elapsedTime - flagsPlaced; // Вычитаем секунды за установленные флажки
             ResultForm resultForm = new ResultForm("Игра окончена!", "Сложность", finalTime);
             resultForm.ShowDialog();
