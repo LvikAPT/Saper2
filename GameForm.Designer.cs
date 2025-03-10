@@ -58,7 +58,6 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackgroundImage = Properties.Resources.playing_field;
             ClientSize = new Size(467, 452);
             Controls.Add(btnFlagRandomMine);
             Controls.Add(flagCountLabel);

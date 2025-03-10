@@ -10,7 +10,6 @@ namespace Saper
         {
             InitializeComponent();
             lblMessage.Text = message;
-            lblDifficulty.Text = $"Сложность: {difficulty}";
             lblTime.Text = $"Время: {elapsedTime} секунд"; // Отображаем время
         }
 

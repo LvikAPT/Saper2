@@ -4,6 +4,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace Saper
 {
@@ -18,6 +20,9 @@ namespace Saper
         private System.Windows.Forms.Timer timer; // Таймер
         private int elapsedTime; // Время в секундах
         private int flagsPlaced; // Количество установленных флажков
+        private Image closedCellImage;
+        private Image openCellImage;
+        private Image mineImage;
 
         public GameForm(string difficulty)
         {
@@ -50,6 +55,21 @@ namespace Saper
             }
             buttons = new Button[rows, columns];
             mineField = new bool[rows, columns];
+        }
+
+        private void LoadImages()
+        {
+            try
+            {
+
+                var closedCellImage = Image.FromFile("..\\Saper\\Images\\cell.jpg");
+                openCellImage = Image.FromFile("..\\Saper\\Images\\openCell.jpg");
+                mineImage = Image.FromFile("..\\Saper\\Images\\mine.jpg");
+            }
+            catch
+            {
+
+            }
         }
 
         private void InitializeGame()
@@ -104,8 +124,7 @@ namespace Saper
         {
             flagCountLabel.Text = $"Флажки: {flagsPlaced} / {mines}"; // Обновляем количество флажков
             timerLabel.Text = $"Время: {elapsedTime}"; // Обновляем время
-                                                       // Добавляем отображение времени перезарядки
-            this.Text = $"Игровое поле (Перезарядка: {abilityCooldown} секунд)";
+            this.Text = $"Игровое поле (Перезарядка: {abilityCooldown} секунд)"; // Обновляем заголовок
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -137,7 +156,9 @@ namespace Saper
 
             if (mineField[row, col])
             {
-                button.BackColor = Color.Red; // Показываем, что это мина
+                button.BackgroundImage = mineImage; // Устанавливаем изображение мины
+                button.BackgroundImageLayout = ImageLayout.Stretch; // Растягиваем изображение
+
                 gameOver = true;
                 timer.Stop(); // Останавливаем таймер
                 ShowResult(false); // Передаем false, чтобы не записывать результат
@@ -360,7 +381,7 @@ namespace Saper
         private const int abilityCooldownTime = 100; // Время перезарядки в секундах
         private void BtnFlagRandomMine_Click(object sender, EventArgs e)
         {
-            RemoveAnyFlag();
+
             if (abilityCooldown > 0)
             {
                 MessageBox.Show($"Способность перезаряжается. Осталось времени: {abilityCooldown} секунд.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -384,10 +405,14 @@ namespace Saper
             // Если есть мины, устанавливаем флажок на одну случайную
             if (minePositions.Count > 0)
             {
+
                 Random rand = new Random();
                 int randomIndex = rand.Next(minePositions.Count);
                 Point randomMine = minePositions[randomIndex];
-
+                if (minePositions.Count == flagsPlaced)
+                {
+                    RemoveAnyFlag();
+                }
                 // Устанавливаем флажок на случайную мину
                 Button button = buttons[randomMine.X, randomMine.Y];
                 button.Text = "★"; // Устанавливаем флажок
@@ -401,6 +426,11 @@ namespace Saper
             {
                 MessageBox.Show("Нет мин для установки флажка!", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        private void GameForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

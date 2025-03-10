@@ -30,15 +30,6 @@
             this.lblMessage.TabIndex = 0;
             this.lblMessage.Text = "Сообщение";
             // 
-            // lblDifficulty
-            // 
-            this.lblDifficulty.AutoSize = true;
-            this.lblDifficulty.Location = new System.Drawing.Point(12, 30);
-            this.lblDifficulty.Name = "lblDifficulty";
-            this.lblDifficulty.Size = new System.Drawing.Size(60, 13);
-            this.lblDifficulty.TabIndex = 1;
-            this.lblDifficulty.Text = "Сложность";
-            // 
             // lblTime
             // 
             this.lblTime.AutoSize = true;
