@@ -21,6 +21,7 @@
         {
             flagCountLabel = new Label();
             timerLabel = new Label();
+            btnFlagRandomMine = new Button();
             SuspendLayout();
             // 
             // flagCountLabel
@@ -41,11 +42,21 @@
             timerLabel.TabIndex = 1;
             timerLabel.Text = "Время: 0";
             // 
+            // btnFlagRandomMine
+            // 
+            btnFlagRandomMine.Location = new Point(359, 354);
+            btnFlagRandomMine.Name = "btnFlagRandomMine";
+            btnFlagRandomMine.Size = new Size(74, 42);
+            btnFlagRandomMine.TabIndex = 0;
+            btnFlagRandomMine.Text = "Случайны Флажок\r\n";
+            btnFlagRandomMine.Click += BtnFlagRandomMine_Click;
+            // 
             // GameForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(467, 462);
+            Controls.Add(btnFlagRandomMine);
             Controls.Add(flagCountLabel);
             Controls.Add(timerLabel);
             Margin = new Padding(4, 3, 4, 3);
@@ -53,5 +64,7 @@
             Text = "Игровое поле";
             ResumeLayout(false);
         }
+
+        private Button btnFlagRandomMine;
     }
 }

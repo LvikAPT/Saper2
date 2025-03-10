@@ -104,12 +104,20 @@ namespace Saper
         {
             flagCountLabel.Text = $"Флажки: {flagsPlaced} / {mines}"; // Обновляем количество флажков
             timerLabel.Text = $"Время: {elapsedTime}"; // Обновляем время
+                                                       // Добавляем отображение времени перезарядки
+            this.Text = $"Игровое поле (Перезарядка: {abilityCooldown} секунд)";
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
             elapsedTime++; // Увеличиваем время на 1 секунду
             UpdateLabels(); // Обновляем метки
+
+            // Уменьшаем время перезарядки, если оно больше 0
+            if (abilityCooldown > 0)
+            {
+                abilityCooldown--;
+            }
         }
 
         private void BtnPause_Click(object sender, EventArgs e)
@@ -229,6 +237,20 @@ namespace Saper
             }
         }
 
+        private void RemoveAnyFlag()
+        {
+            // Ищем любую кнопку с установленным флажком и убираем его
+            foreach (var btn in buttons)
+            {
+                if (btn.Text == "★")
+                {
+                    btn.Text = ""; // Убираем флажок
+                    flagsPlaced--; // Уменьшаем счетчик флажков
+                    break; // Выходим из цикла после удаления одного флажка
+                }
+            }
+        }
+
         private void ShowResult(bool won)
         {
             // Показываем все мины
@@ -332,6 +354,52 @@ namespace Saper
                 gameOver = true;
                 timer.Stop(); // Останавливаем таймер
                 ShowResult(true); // Передаем true, чтобы записать результат
+            }
+        }
+        private int abilityCooldown = 0; // Время перезарядки в секундах
+        private const int abilityCooldownTime = 100; // Время перезарядки в секундах
+        private void BtnFlagRandomMine_Click(object sender, EventArgs e)
+        {
+            RemoveAnyFlag();
+            if (abilityCooldown > 0)
+            {
+                MessageBox.Show($"Способность перезаряжается. Осталось времени: {abilityCooldown} секунд.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Получаем все позиции мин
+            var minePositions = new List<Point>();
+
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    if (mineField[i, j] && buttons[i, j].Text != "★") // Если это мина и флажок не установлен
+                    {
+                        minePositions.Add(new Point(i, j));
+                    }
+                }
+            }
+
+            // Если есть мины, устанавливаем флажок на одну случайную
+            if (minePositions.Count > 0)
+            {
+                Random rand = new Random();
+                int randomIndex = rand.Next(minePositions.Count);
+                Point randomMine = minePositions[randomIndex];
+
+                // Устанавливаем флажок на случайную мину
+                Button button = buttons[randomMine.X, randomMine.Y];
+                button.Text = "★"; // Устанавливаем флажок
+                flagsPlaced++; // Увеличиваем счетчик флажков
+                UpdateLabels(); // Обновляем метки
+
+                // Устанавливаем время перезарядки
+                abilityCooldown = abilityCooldownTime;
+            }
+            else
+            {
+                MessageBox.Show("Нет мин для установки флажка!", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }
