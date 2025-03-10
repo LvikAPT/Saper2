@@ -167,6 +167,19 @@ namespace Saper
                 }
             }
 
+            // Проверяем, нужно ли вернуть флажок
+            if (flagsPlaced > 0)
+            {
+                foreach (var btn in buttons)
+                {
+                    if (btn.Text == "★" && !btn.Enabled) // Если флажок установлен на открытой клетке
+                    {
+                        btn.Text = ""; // Убираем флажок
+                        flagsPlaced--; // Уменьшаем счетчик флажков
+                    }
+                }
+            }
+
             CheckWinCondition(); // Проверяем условия победы после открытия клетки
         }
 
@@ -202,8 +215,15 @@ namespace Saper
                 }
                 else
                 {
-                    button.Text = "★"; // Устанавливаем флажок
-                    flagsPlaced++; // Увеличиваем счетчик флажков
+                    if (flagsPlaced < mines) // Проверяем, не превышает ли количество флажков количество мин
+                    {
+                        button.Text = "★"; // Устанавливаем флажок
+                        flagsPlaced++; // Увеличиваем счетчик флажков
+                    }
+                    else
+                    {
+                        MessageBox.Show("Нельзя установить больше флажков, чем мин!", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                 }
                 UpdateLabels(); // Обновляем метки
             }
@@ -286,7 +306,7 @@ namespace Saper
                     if (time < lastTime)
                     {
                         lines.Add($"{playerName};{time}");
-                        File.WriteAllLines(leaderboardFilePath, lines);
+                        File.WriteAllLines(leaderboardFilePath, lines.OrderBy(line => int.Parse(line.Split(';')[1])).ToList());
                     }
                 }
             }
