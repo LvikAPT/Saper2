@@ -1,4 +1,4 @@
-﻿namespace Saper
+﻿﻿namespace Saper
 {
     partial class MenuForm
     {
@@ -15,75 +15,84 @@
 
         private void InitializeComponent()
         {
-            this.cmbDifficulty = new System.Windows.Forms.ComboBox();
-            this.btnStartGame = new System.Windows.Forms.Button();
-            this.btnLeaderboard = new System.Windows.Forms.Button();
-            this.btnHelp = new System.Windows.Forms.Button();
-            this.btnExit = new System.Windows.Forms.Button();
-            this.SuspendLayout();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MenuForm));
+            cmbDifficulty = new ComboBox();
+            btnStartGame = new Button();
+            btnLeaderboard = new Button();
+            btnHelp = new Button();
+            btnExit = new Button();
+            SuspendLayout();
             // 
             // cmbDifficulty
             // 
-            this.cmbDifficulty.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDifficulty.FormattingEnabled = true;
-            this.cmbDifficulty.Location = new System.Drawing.Point(12, 12);
-            this.cmbDifficulty.Name = "cmbDifficulty";
-            this.cmbDifficulty.Size = new System.Drawing.Size(121, 21);
-            this.cmbDifficulty.TabIndex = 0;
+            cmbDifficulty.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbDifficulty.FormattingEnabled = true;
+            cmbDifficulty.Location = new Point(34, 51);
+            cmbDifficulty.Margin = new Padding(4, 3, 4, 3);
+            cmbDifficulty.Name = "cmbDifficulty";
+            cmbDifficulty.Size = new Size(102, 23);
+            cmbDifficulty.TabIndex = 0;
             // 
             // btnStartGame
             // 
-            this.btnStartGame.Location = new System.Drawing.Point(12, 39);
-            this.btnStartGame.Name = "btnStartGame";
-            this.btnStartGame.Size = new System.Drawing.Size(121, 23);
-            this.btnStartGame.TabIndex = 1;
-            this.btnStartGame.Text = "Начать игру";
-            this.btnStartGame.UseVisualStyleBackColor = true;
-            this.btnStartGame.Click += new System.EventHandler(this.btnStartGame_Click);
+            btnStartGame.Location = new Point(34, 80);
+            btnStartGame.Margin = new Padding(4, 3, 4, 3);
+            btnStartGame.Name = "btnStartGame";
+            btnStartGame.Size = new Size(102, 27);
+            btnStartGame.TabIndex = 1;
+            btnStartGame.Text = "Начать игру";
+            btnStartGame.UseVisualStyleBackColor = true;
+            btnStartGame.Click += btnStartGame_Click;
             // 
             // btnLeaderboard
             // 
-            this.btnLeaderboard.Location = new System.Drawing.Point(12, 68);
-            this.btnLeaderboard.Name = "btnLeaderboard";
-            this.btnLeaderboard.Size = new System.Drawing.Size(121, 23);
-            this.btnLeaderboard.TabIndex = 2;
-            this.btnLeaderboard.Text = "Лидерборд";
-            this.btnLeaderboard.UseVisualStyleBackColor = true;
-            this.btnLeaderboard.Click += new System.EventHandler(this.btnLeaderboard_Click);
+            btnLeaderboard.Location = new Point(34, 113);
+            btnLeaderboard.Margin = new Padding(4, 3, 4, 3);
+            btnLeaderboard.Name = "btnLeaderboard";
+            btnLeaderboard.Size = new Size(102, 27);
+            btnLeaderboard.TabIndex = 2;
+            btnLeaderboard.Text = "Лидерборд";
+            btnLeaderboard.UseVisualStyleBackColor = true;
+            btnLeaderboard.Click += btnLeaderboard_Click;
             // 
             // btnHelp
             // 
-            this.btnHelp.Location = new System.Drawing.Point(12, 97);
-            this.btnHelp.Name = "btnHelp";
-            this.btnHelp.Size = new System.Drawing.Size(121, 23);
-            this.btnHelp.TabIndex = 3;
-            this.btnHelp.Text = "Помощь";
-            this.btnHelp.UseVisualStyleBackColor = true;
-            this.btnHelp.Click += new System.EventHandler(this.btnHelp_Click);
+            btnHelp.Location = new Point(4, 146);
+            btnHelp.Margin = new Padding(4, 3, 4, 3);
+            btnHelp.Name = "btnHelp";
+            btnHelp.Size = new Size(71, 27);
+            btnHelp.TabIndex = 3;
+            btnHelp.Text = "Помощь";
+            btnHelp.UseVisualStyleBackColor = true;
+            btnHelp.Click += btnHelp_Click;
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(12, 126);
-            this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(121, 23);
-            this.btnExit.TabIndex = 4;
-            this.btnExit.Text = "Выход";
-            this.btnExit.UseVisualStyleBackColor = true;
-            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            btnExit.Location = new Point(101, 146);
+            btnExit.Margin = new Padding(4, 3, 4, 3);
+            btnExit.Name = "btnExit";
+            btnExit.Size = new Size(71, 27);
+            btnExit.TabIndex = 4;
+            btnExit.Text = "Выход";
+            btnExit.UseVisualStyleBackColor = true;
+            btnExit.Click += btnExit_Click;
             // 
             // MenuForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(150, 160);
-            this.Controls.Add(this.btnExit);
-            this.Controls.Add(this.btnHelp);
-            this.Controls.Add(this.btnLeaderboard);
-            this.Controls.Add(this.btnStartGame);
-            this.Controls.Add(this.cmbDifficulty);
-            this.Name = "MenuForm";
-            this.Text = "Меню";
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
+            ClientSize = new Size(175, 185);
+            Controls.Add(btnExit);
+            Controls.Add(btnHelp);
+            Controls.Add(btnLeaderboard);
+            Controls.Add(btnStartGame);
+            Controls.Add(cmbDifficulty);
+            Margin = new Padding(4, 3, 4, 3);
+            Name = "MenuForm";
+            Text = "Меню";
+            Load += MenuForm_Load;
+            ResumeLayout(false);
         }
 
         private System.Windows.Forms.ComboBox cmbDifficulty;

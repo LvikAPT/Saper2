@@ -15,40 +15,44 @@
 
         private void InitializeComponent()
         {
-            this.txtLeaderboard = new System.Windows.Forms.TextBox();
-            this.btnClearLeaderboard = new System.Windows.Forms.Button();
-            this.SuspendLayout();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LeaderboardForm));
+            txtLeaderboard = new TextBox();
+            btnClearLeaderboard = new Button();
+            SuspendLayout();
             // 
             // txtLeaderboard
             // 
-            this.txtLeaderboard.Location = new System.Drawing.Point(12, 12);
-            this.txtLeaderboard.Multiline = true;
-            this.txtLeaderboard.ReadOnly = true;
-            this.txtLeaderboard.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLeaderboard.Size = new System.Drawing.Size(303, 230);
-            this.txtLeaderboard.TabIndex = 0;
+            txtLeaderboard.ImeMode = ImeMode.Off;
+            txtLeaderboard.Location = new Point(65, 176);
+            txtLeaderboard.Multiline = true;
+            txtLeaderboard.Name = "txtLeaderboard";
+            txtLeaderboard.ReadOnly = true;
+            txtLeaderboard.ScrollBars = ScrollBars.Vertical;
+            txtLeaderboard.Size = new Size(325, 80);
+            txtLeaderboard.TabIndex = 0;
             // 
             // btnClearLeaderboard
             // 
-            this.btnClearLeaderboard.Location = new System.Drawing.Point(12, 248);
-            this.btnClearLeaderboard.Name = "btnClearLeaderboard";
-            this.btnClearLeaderboard.Size = new System.Drawing.Size(303, 23);
-            this.btnClearLeaderboard.TabIndex = 1;
-            this.btnClearLeaderboard.Text = "Очистить лидерборд";
-            this.btnClearLeaderboard.UseVisualStyleBackColor = true;
-            this.btnClearLeaderboard.Click += new System.EventHandler(this.btnClearLeaderboard_Click);
+            btnClearLeaderboard.Location = new Point(65, 313);
+            btnClearLeaderboard.Name = "btnClearLeaderboard";
+            btnClearLeaderboard.Size = new Size(303, 23);
+            btnClearLeaderboard.TabIndex = 1;
+            btnClearLeaderboard.Text = "Очистить лидерборд";
+            btnClearLeaderboard.UseVisualStyleBackColor = true;
+            btnClearLeaderboard.Click += btnClearLeaderboard_Click;
             // 
             // LeaderboardForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(331, 301);
-            this.Controls.Add(this.btnClearLeaderboard);
-            this.Controls.Add(this.txtLeaderboard);
-            this.Name = "LeaderboardForm";
-            this.Text = "Лидерборд";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
+            ClientSize = new Size(446, 348);
+            Controls.Add(btnClearLeaderboard);
+            Controls.Add(txtLeaderboard);
+            Name = "LeaderboardForm";
+            Text = "Лидерборд";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         private System.Windows.Forms.TextBox txtLeaderboard;

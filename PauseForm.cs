@@ -27,5 +27,10 @@ namespace Saper
             this.Hide(); // Скрываем форму паузы
             gameForm.Hide(); // Скрываем игровую форму
         }
+
+        private void PauseForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

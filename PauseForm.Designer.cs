@@ -15,40 +15,46 @@
 
         private void InitializeComponent()
         {
-            this.btnResume = new System.Windows.Forms.Button();
-            this.btnExitToMenu = new System.Windows.Forms.Button();
-            this.SuspendLayout();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PauseForm));
+            btnResume = new Button();
+            btnExitToMenu = new Button();
+            SuspendLayout();
             // 
             // btnResume
             // 
-            this.btnResume.Location = new System.Drawing.Point(12, 12);
-            this.btnResume.Name = "btnResume";
-            this.btnResume.Size = new System.Drawing.Size(75, 23);
-            this.btnResume.TabIndex = 0;
-            this.btnResume.Text = "Продолжить";
-            this.btnResume.UseVisualStyleBackColor = true;
-            this.btnResume.Click += new System.EventHandler(this.btnResume_Click);
+            btnResume.Location = new Point(13, 239);
+            btnResume.Margin = new Padding(4, 3, 4, 3);
+            btnResume.Name = "btnResume";
+            btnResume.Size = new Size(88, 27);
+            btnResume.TabIndex = 0;
+            btnResume.Text = "Продолжить";
+            btnResume.UseVisualStyleBackColor = true;
+            btnResume.Click += btnResume_Click;
             // 
             // btnExitToMenu
             // 
-            this.btnExitToMenu.Location = new System.Drawing.Point(12, 41);
-            this.btnExitToMenu.Name = "btnExitToMenu";
-            this.btnExitToMenu.Size = new System.Drawing.Size(75, 23);
-            this.btnExitToMenu.TabIndex = 1;
-            this.btnExitToMenu.Text = "В меню";
-            this.btnExitToMenu.UseVisualStyleBackColor = true;
-            this.btnExitToMenu.Click += new System.EventHandler(this.btnExitToMenu_Click);
+            btnExitToMenu.Location = new Point(197, 239);
+            btnExitToMenu.Margin = new Padding(4, 3, 4, 3);
+            btnExitToMenu.Name = "btnExitToMenu";
+            btnExitToMenu.Size = new Size(88, 27);
+            btnExitToMenu.TabIndex = 1;
+            btnExitToMenu.Text = "В меню";
+            btnExitToMenu.UseVisualStyleBackColor = true;
+            btnExitToMenu.Click += btnExitToMenu_Click;
             // 
             // PauseForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(100, 80);
-            this.Controls.Add(this.btnExitToMenu);
-            this.Controls.Add(this.btnResume);
-            this.Name = "PauseForm";
-            this.Text = "Пауза";
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
+            ClientSize = new Size(298, 289);
+            Controls.Add(btnExitToMenu);
+            Controls.Add(btnResume);
+            Margin = new Padding(4, 3, 4, 3);
+            Name = "PauseForm";
+            Text = "Пауза";
+            Load += PauseForm_Load;
+            ResumeLayout(false);
         }
 
         private System.Windows.Forms.Button btnResume;
