@@ -194,36 +194,31 @@ namespace Saper
 
         private void AddScoreToLeaderboard(string playerName, int time)
         {
-            // Добавляем результат в файл leaderboard.txt
-            const string leaderboardFilePath = "leaderboard.txt";
+            string leaderboardFilePath = "leaderboard.txt";
+            var lines = File.Exists(leaderboardFilePath) ? File.ReadAllLines(leaderboardFilePath).ToList() : new List<string>();
 
-            // Проверяем, есть ли в лидерборде хотя бы один игрок
-            if (File.Exists(leaderboardFilePath))
+            // Проверяем, если лидерборд пуст
+            if (lines.Count == 0)
             {
-                string[] lines = File.ReadAllLines(leaderboardFilePath);
-                if (lines.Length > 0)
+                // Если лидерборд пуст, добавляем запись только если время меньше 999
+                if (time < 999)
                 {
-                    // Получаем время первого игрока
-                    string[] firstPlayerData = lines[0].Split(';');
-                    if (firstPlayerData.Length > 1 && int.TryParse(firstPlayerData[1], out int firstPlayerTime))
-                    {
-                        // Если время игрока лучше на 1 секунду, добавляем его в лидерборд
-                        if (time < firstPlayerTime - 1)
-                        {
-                            using (StreamWriter writer = new StreamWriter(leaderboardFilePath, true))
-                            {
-                                writer.WriteLine($"{playerName};{time}"); // Записываем имя игрока и время
-                            }
-                        }
-                    }
+                    lines.Add($"{playerName};{time}");
+                    File.WriteAllLines(leaderboardFilePath, lines);
                 }
             }
             else
             {
-                // Если файл не существует, создаем его и добавляем результат
-                using (StreamWriter writer = new StreamWriter(leaderboardFilePath, true))
+                // Если лидерборд не пуст, проверяем время последнего игрока
+                var lastEntry = lines.Last().Split(';');
+                if (lastEntry.Length == 2 && int.TryParse(lastEntry[1], out int lastTime))
                 {
-                    writer.WriteLine($"{playerName};{time}"); // Записываем имя игрока и время
+                    // Добавляем запись только если время игрока лучше, чем у последнего игрока
+                    if (time < lastTime)
+                    {
+                        lines.Add($"{playerName};{time}");
+                        File.WriteAllLines(leaderboardFilePath, lines);
+                    }
                 }
             }
         }
