@@ -25,6 +25,7 @@ namespace Saper
             SetDifficulty(difficulty);
             InitializeGame();
             InitializeTimer(); // Инициализация таймера
+            UpdateLabels(); // Обновляем метки
         }
 
         private void SetDifficulty(string difficulty)
@@ -60,7 +61,7 @@ namespace Saper
                 {
                     buttons[i, j] = new Button();
                     buttons[i, j].Size = new Size(30, 30);
-                    buttons[i, j].Location = new Point(j * 30, i * 30);
+                    buttons[i, j].Location = new Point(j * 30, i * 30 + 40); // Сдвигаем вниз, чтобы оставить место для меток
                     buttons[i, j].Click += Button_Click; // Левый клик для открытия клетки
                     buttons[i, j].MouseDown += Button_MouseDown; // Правый клик для установки флажка
                     this.Controls.Add(buttons[i, j]);
@@ -99,9 +100,16 @@ namespace Saper
             timer.Start(); // Запуск таймера
         }
 
+        private void UpdateLabels()
+        {
+            flagCountLabel.Text = $"Флажки: {flagsPlaced} / {mines}"; // Обновляем количество флажков
+            timerLabel.Text = $"Время: {elapsedTime}"; // Обновляем время
+        }
+
         private void Timer_Tick(object sender, EventArgs e)
         {
             elapsedTime++; // Увеличиваем время на 1 секунду
+            UpdateLabels(); // Обновляем метки
         }
 
         private void BtnPause_Click(object sender, EventArgs e)
@@ -116,7 +124,7 @@ namespace Saper
             if (gameOver) return;
 
             Button button = sender as Button;
-            int row = button.Location.Y / 30;
+            int row = button.Location.Y / 30 - 1; // Учитываем смещение из-за меток
             int col = button.Location.X / 30;
 
             if (mineField[row, col])
@@ -158,6 +166,8 @@ namespace Saper
                     }
                 }
             }
+
+            CheckWinCondition(); // Проверяем условия победы после открытия клетки
         }
 
         private int CountMinesAround(int row, int col)
@@ -195,6 +205,7 @@ namespace Saper
                     button.Text = "★"; // Устанавливаем флажок
                     flagsPlaced++; // Увеличиваем счетчик флажков
                 }
+                UpdateLabels(); // Обновляем метки
             }
         }
 
@@ -255,7 +266,7 @@ namespace Saper
             string leaderboardFilePath = "leaderboard.txt";
             var lines = File.Exists(leaderboardFilePath) ? File.ReadAllLines(leaderboardFilePath).ToList() : new List<string>();
 
-            // // Проверяем, если лидерборд пуст
+            // Проверяем, если лидерборд пуст
             if (lines.Count == 0)
             {
                 // Если лидерборд пуст, добавляем запись только если время меньше 999
@@ -278,6 +289,29 @@ namespace Saper
                         File.WriteAllLines(leaderboardFilePath, lines);
                     }
                 }
+            }
+        }
+
+        private void CheckWinCondition()
+        {
+            // Проверяем, все ли клетки без мин открыты
+            int openedCells = 0;
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    if (!buttons[i, j].Enabled)
+                    {
+                        openedCells++;
+                    }
+                }
+            }
+
+            if (openedCells == (rows * columns - mines))
+            {
+                gameOver = true;
+                timer.Stop(); // Останавливаем таймер
+                ShowResult(true); // Передаем true, чтобы записать результат
             }
         }
     }

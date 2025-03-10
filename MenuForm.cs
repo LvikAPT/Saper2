@@ -14,6 +14,7 @@ namespace Saper
         private void InitializeDifficultyComboBox()
         {
             // Добавляем уровни сложности в ComboBox
+            cmbDifficulty.Items.Add("Тест");
             cmbDifficulty.Items.Add("Легкий");
             cmbDifficulty.Items.Add("Средний");
             cmbDifficulty.Items.Add("Сложный");
