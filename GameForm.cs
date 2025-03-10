@@ -2,6 +2,7 @@
 using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Saper
@@ -14,7 +15,7 @@ namespace Saper
         private Button[,] buttons;
         private bool[,] mineField;
         private bool gameOver = false;
-        private System.Windows.Forms.Timer timer; // Таймер // Таймер
+        private System.Windows.Forms.Timer timer; // Таймер
         private int elapsedTime; // Время в секундах
         private int flagsPlaced; // Количество установленных флажков
 
@@ -31,9 +32,9 @@ namespace Saper
             switch (difficulty)
             {
                 case "Легкий":
-                    rows = 1;
-                    columns = 1;
-                    mines = 0;
+                    rows = 8;
+                    columns = 8;
+                    mines = 10;
                     break;
                 case "Средний":
                     rows = 10;
@@ -127,10 +128,55 @@ namespace Saper
             }
             else
             {
-                button.BackColor = Color.LightGray; // Открываем клетку
-                button.Enabled = false; // Делаем кнопку неактивной
-                CheckWinCondition(); // Проверяем условия победы
+                OpenCell(row, col); // Открываем клетку
             }
+        }
+
+        private void OpenCell(int row, int col)
+        {
+            if (row < 0 || row >= rows || col < 0 || col >= columns || !buttons[row, col].Enabled)
+                return;
+
+            buttons[row, col].Enabled = false; // Делаем кнопку неактивной
+            int minesAround = CountMinesAround(row, col); // Подсчитываем количество мин вокруг
+
+            if (minesAround > 0)
+            {
+                buttons[row, col].Text = minesAround.ToString(); // Отображаем количество мин
+                buttons[row, col].BackColor = Color.LightGray; // Открываем клетку
+            }
+            else
+            {
+                buttons[row, col].BackColor = Color.LightGray; // Открываем клетку
+                // Если вокруг нет мин, открываем соседние клетки
+                for (int i = -1; i <= 1; i++)
+                {
+                    for (int j = -1; j <= 1; j++)
+                    {
+                        if (i == 0 && j == 0) continue; // Пропускаем саму клетку
+                        OpenCell(row + i, col + j); // Рекурсивно открываем соседние клетки
+                    }
+                }
+            }
+        }
+
+        private int CountMinesAround(int row, int col)
+        {
+            int count = 0;
+            for (int i = -1; i <= 1; i++)
+            {
+                for (int j = -1; j <= 1; j++)
+                {
+                    if (i == 0 && j == 0) continue; // Пропускаем саму клетку
+                    int newRow = row + i;
+                    int newCol = col + j;
+                    if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < columns && mineField[newRow, newCol])
+                    {
+                        count++; // Увеличиваем счетчик, если найдена мина
+                    }
+                }
+            }
+            return count; // Возвращаем количество мин вокруг
         }
 
         private void Button_MouseDown(object sender, MouseEventArgs e)
@@ -188,8 +234,20 @@ namespace Saper
 
         private string PromptForPlayerName()
         {
-            // Используем InputBox для запроса имени игрока
-            return Microsoft.VisualBasic.Interaction.InputBox("Введите ваше имя:", "Имя игрока", "Игрок", -1, -1);
+            using (Form nameForm = new Form())
+            {
+                Label nameLabel = new Label() { Text = "Введите ваше имя:", Dock = DockStyle.Top };
+                TextBox nameTextBox = new TextBox() { Dock = DockStyle.Top };
+                Button submitButton = new Button() { Text = "OK", Dock = DockStyle.Bottom };
+
+                submitButton.Click += (sender, e) => { nameForm.Close(); };
+                nameForm.Controls.Add(nameTextBox);
+                nameForm.Controls.Add(submitButton);
+                nameForm.Controls.Add(nameLabel);
+                nameForm.ShowDialog();
+
+                return nameTextBox.Text;
+            }
         }
 
         private void AddScoreToLeaderboard(string playerName, int time)
@@ -197,7 +255,7 @@ namespace Saper
             string leaderboardFilePath = "leaderboard.txt";
             var lines = File.Exists(leaderboardFilePath) ? File.ReadAllLines(leaderboardFilePath).ToList() : new List<string>();
 
-            // Проверяем, если лидерборд пуст
+            // // Проверяем, если лидерборд пуст
             if (lines.Count == 0)
             {
                 // Если лидерборд пуст, добавляем запись только если время меньше 999
@@ -220,30 +278,6 @@ namespace Saper
                         File.WriteAllLines(leaderboardFilePath, lines);
                     }
                 }
-            }
-        }
-
-        private void CheckWinCondition()
-        {
-            // Проверяем, открыты ли все клетки, кроме мин
-            int openedCells = 0;
-            for (int i = 0; i < rows; i++)
-            {
-                for (int j = 0; j < columns; j++)
-                {
-                    if (buttons[i, j].BackColor == Color.LightGray) // Если клетка открыта
-                    {
-                        openedCells++;
-                    }
-                }
-            }
-
-            // Если все клетки, кроме мин, открыты, игрок выигрывает
-            if (openedCells == (rows * columns - mines))
-            {
-                gameOver = true;
-                timer.Stop(); // Останавливаем таймер
-                ShowResult(true); // Передаем true, чтобы записать результат
             }
         }
     }
