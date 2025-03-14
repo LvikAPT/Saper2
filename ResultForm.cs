@@ -17,7 +17,7 @@ namespace Saper
         {
             MenuForm menuForm = new MenuForm();
             menuForm.Show();
-            this.Hide();
+            this.Close();
         }
     }
 }

@@ -38,9 +38,9 @@ namespace Saper
             switch (difficulty)
             {
                 case "Легкий":
-                    rows = 8;
-                    columns = 8;
-                    mines = 10;
+                    rows = 4;
+                    columns = 4;
+                    mines = 2;
                     break;
                 case "Средний":
                     rows = 10;
