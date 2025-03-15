@@ -38,9 +38,9 @@ namespace Saper
             switch (difficulty)
             {
                 case "Легкий":
-                    rows = 4;
-                    columns = 4;
-                    mines = 2;
+                    rows = 8;
+                    columns = 8;
+                    mines = 10;
                     break;
                 case "Средний":
                     rows = 10;
@@ -55,21 +55,6 @@ namespace Saper
             }
             buttons = new Button[rows, columns];
             mineField = new bool[rows, columns];
-        }
-
-        private void LoadImages()
-        {
-            try
-            {
-
-                var closedCellImage = Image.FromFile("C:\\IS - 22\\С#\\Saper\\Images\\cell.jpg");
-                openCellImage = Image.FromFile("C:\\IS - 22\\С#\\Saper\\Images\\openCell.jpg");
-                mineImage = Image.FromFile("C:\\IS - 22\\С#\\Saper\\Images\\mine.jpg");
-            }
-            catch
-            {
-
-            }
         }
 
         private void InitializeGame()
@@ -141,9 +126,11 @@ namespace Saper
 
         private void BtnPause_Click(object sender, EventArgs e)
         {
+            timer.Stop(); // Останавливаем таймер
             this.Hide(); // Скрываем игровую форму
             PauseForm pauseForm = new PauseForm(this); // Передаем ссылку на игровую форму
             pauseForm.ShowDialog(); // Открываем форму паузы как модальное окно
+            timer.Start(); // Запускаем таймер снова после закрытия формы паузы
         }
 
         private void Button_Click(object sender, EventArgs e)
