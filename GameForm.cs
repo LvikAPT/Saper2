@@ -62,9 +62,9 @@ namespace Saper
             try
             {
 
-                var closedCellImage = Image.FromFile("..\\Saper\\Images\\cell.jpg");
-                openCellImage = Image.FromFile("..\\Saper\\Images\\openCell.jpg");
-                mineImage = Image.FromFile("..\\Saper\\Images\\mine.jpg");
+                var closedCellImage = Image.FromFile("C:\\IS - 22\\С#\\Saper\\Images\\cell.jpg");
+                openCellImage = Image.FromFile("C:\\IS - 22\\С#\\Saper\\Images\\openCell.jpg");
+                mineImage = Image.FromFile("C:\\IS - 22\\С#\\Saper\\Images\\mine.jpg");
             }
             catch
             {

@@ -15,57 +15,58 @@
 
         private void InitializeComponent()
         {
-            this.lblMessage = new System.Windows.Forms.Label();
-            this.lblDifficulty = new System.Windows.Forms.Label();
-            this.lblTime = new System.Windows.Forms.Label();
-            this.btnBack = new System.Windows.Forms.Button();
-            this.SuspendLayout();
+            lblMessage = new Label();
+            lblTime = new Label();
+            btnBack = new Button();
+            SuspendLayout();
             // 
             // lblMessage
             // 
-            this.lblMessage.AutoSize = true;
-            this.lblMessage.Location = new System.Drawing.Point(12, 9);
-            this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Size = new System.Drawing.Size(35, 13);
-            this.lblMessage.TabIndex = 0;
-            this.lblMessage.Text = "Сообщение";
+            lblMessage.AutoSize = true;
+            lblMessage.Location = new Point(14, 10);
+            lblMessage.Margin = new Padding(4, 0, 4, 0);
+            lblMessage.Name = "lblMessage";
+            lblMessage.Size = new Size(73, 15);
+            lblMessage.TabIndex = 0;
+            lblMessage.Text = "Сообщение";
             // 
             // lblTime
             // 
-            this.lblTime.AutoSize = true;
-            this.lblTime.Location = new System.Drawing.Point(12, 51);
-            this.lblTime.Name = "lblTime";
-            this.lblTime.Size = new System.Drawing.Size(34, 13);
-            this.lblTime.TabIndex = 2;
-            this.lblTime.Text = "Время";
+            lblTime.AutoSize = true;
+            lblTime.Location = new Point(14, 59);
+            lblTime.Margin = new Padding(4, 0, 4, 0);
+            lblTime.Name = "lblTime";
+            lblTime.Size = new Size(42, 15);
+            lblTime.TabIndex = 2;
+            lblTime.Text = "Время";
             // 
             // btnBack
             // 
-            this.btnBack.Location = new System.Drawing.Point(12, 80);
-            this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(75, 23);
-            this.btnBack.TabIndex = 3;
-            this.btnBack.Text = "Назад";
-            this.btnBack.UseVisualStyleBackColor = true;
-            this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
+            btnBack.Location = new Point(14, 92);
+            btnBack.Margin = new Padding(4, 3, 4, 3);
+            btnBack.Name = "btnBack";
+            btnBack.Size = new Size(88, 27);
+            btnBack.TabIndex = 3;
+            btnBack.Text = "Назад";
+            btnBack.UseVisualStyleBackColor = true;
+            btnBack.Click += btnBack_Click;
             // 
             // ResultForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(200, 120);
-            this.Controls.Add(this.btnBack);
-            this.Controls.Add(this.lblTime);
-            this.Controls.Add(this.lblDifficulty);
-            this.Controls.Add(this.lblMessage);
-            this.Name = "ResultForm";
-            this.Text = "Результат";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(233, 138);
+            Controls.Add(btnBack);
+            Controls.Add(lblTime);
+            Controls.Add(lblMessage);
+            Margin = new Padding(4, 3, 4, 3);
+            Name = "ResultForm";
+            Text = "Результат";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         private System.Windows.Forms.Label lblMessage;
-        private System.Windows.Forms.Label lblDifficulty;
         private System.Windows.Forms.Label lblTime;
         private System.Windows.Forms.Button btnBack;
     }

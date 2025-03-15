@@ -19,6 +19,7 @@
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameForm));
             flagCountLabel = new Label();
             timerLabel = new Label();
             btnFlagRandomMine = new Button();
@@ -58,6 +59,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new Size(467, 452);
             Controls.Add(btnFlagRandomMine);
             Controls.Add(flagCountLabel);
